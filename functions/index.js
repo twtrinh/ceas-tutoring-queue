@@ -13,7 +13,8 @@ const db = admin.firestore();
 const requestCollectionName = 'tutoringRequests';
 
 app.post('/api/requests', async (req, res) => {
-  try{
+  var querySnapshot = null;
+  try {
     const request = {
       name: req.body.name,
       pantherID: req.body.pantherID,
@@ -22,19 +23,20 @@ app.post('/api/requests', async (req, res) => {
       requestedAt: new Date().toString()
     }
     const requestCollection = db.collection(requestCollectionName);
-    const querySnapshot = await requestCollection.where("pantherID", "==", request.pantherID).where("course", "==", request.course ).get();
-  }catch (error){
+    querySnapshot = await requestCollection.where("pantherID", "==", request.pantherID).where("course", "==", request.course ).get();
+  } catch (error){
     functions.logger.error(error);
     res.status(400).send("Issue with query");
   }
+
   try {
     functions.logger.log(querySnapshot);
     if (!querySnapshot.size) {
       const newDoc = await requestCollection.add(request);
       res.status(201).send(`Created a new user: ${newDoc.id}`);
     } else {
-      functions.logger.log("already added in queue");
-      res.status(400).send('already added in queue!!');
+      functions.logger.log("Already added in queue");
+      res.status(400).send('Already added in queue!!');
     }
 
   } catch (error) {
@@ -42,15 +44,17 @@ app.post('/api/requests', async (req, res) => {
     res.status(400).send(`User should cointain name, pantherID, course, and requested time!!!`);
   }
 })
+
 app.get('/api', async (req, res) => {
   functions.logger.log(req);
-  try{
+  try {
     const testGet = (await db.collection(requestCollectionName).get()).docs.map(doc => doc.data());
     functions.logger.log(testGet);
     res.send(JSON.stringify(testGet));
-  }catch (error){
+  } catch (error){
     functions.logger.error(error);
     res.send("Get request issue.");
   }
 })
+
 exports.api = functions.https.onRequest(app);
