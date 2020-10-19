@@ -8,21 +8,24 @@ import {
 import Home from './pages/Home';
 import RequestForm from "./pages/RequestForm";
 import Layout from './components/Layout';
+import { UserProvider } from './contexts/UserContext';
 
 function App() {
   return (
-    <Router>
-      <Layout>
-        <Switch>
-          <Route path="/form">
-            <RequestForm />
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
-        </Switch>
-      </Layout>
-    </Router>
+    <UserProvider>
+      <Router>
+        <Layout>
+          <Switch>
+            <Route path="/form">
+              <RequestForm />
+            </Route>
+            <Route path="/">
+              <Home />
+            </Route>
+          </Switch>
+        </Layout>
+      </Router>
+    </UserProvider>
   );
 }
 
