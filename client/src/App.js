@@ -1,15 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import { List, Typography, Divider } from 'antd';
+import RequestForm from "./components/RequestForm";
 
 function App() {
   const [requests, setRequests] = useState([]);
   
   useEffect(() => {
-    fetch("/api")
-      .then(res => res.json())
-      .then(req => setRequests(req.map((req, index) => ({ ...req, index }))));
+    getRequests()
   }, []);
+
+  const getRequests = () => {
+    fetch("/api/requests")
+      .then(res => res.json())
+      .then(req => {
+        console.log(req);
+        setRequests(req.map((req, index) => ({ ...req, index })))
+      });
+  }
 
   return (
     <div>
@@ -21,12 +29,13 @@ function App() {
             <List.Item>
               <p>
                 {
-                  request.index + " " + request.name
+                  `${request.index} ${request.firstName} ${request.lastName}`
                 }
               </p>
             </List.Item>
         }
       />
+      <RequestForm onSubmit={getRequests} />
     </div>
   );
 }
