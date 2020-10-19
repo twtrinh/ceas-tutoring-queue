@@ -1,9 +1,11 @@
 import React from 'react';
 import { useForm } from "react-hook-form";
 import { courseGroups } from '../constants';
+import { useHistory } from 'react-router';
 
-export default function RequestForm({ onSubmit }) {
+export default function RequestForm() {
     const { register, errors, handleSubmit } = useForm();
+    const history = useHistory();
     
     const onSubmitHandler = async data => {
         const response = await fetch("/api/requests", {
@@ -13,8 +15,8 @@ export default function RequestForm({ onSubmit }) {
             },
             body: JSON.stringify(data)
           });
+          history.push('/');
         
-        onSubmit()
     };
 
     return (
