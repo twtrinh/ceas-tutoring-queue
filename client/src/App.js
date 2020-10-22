@@ -6,6 +6,7 @@ import {
   Route,
 } from "react-router-dom";
 import Home from './pages/Home';
+import Login from './pages/Login';
 import RequestForm from "./pages/RequestForm";
 import Layout from './components/Layout';
 import { UserProvider } from './contexts/UserContext';
@@ -18,6 +19,9 @@ function App() {
           <Switch>
             <Route path="/form">
               <RequestForm />
+            </Route>
+            <Route path="/login">
+              <Login />
             </Route>
             <Route path="/">
               <Home />

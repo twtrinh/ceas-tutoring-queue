@@ -12,7 +12,6 @@ export default function Home() {
     fetch("/api/requests")
       .then(res => res.json())
       .then(req => {
-        console.log(req);
         setRequests(req.map((req, index) => ({ ...req, index })))
       });
   }

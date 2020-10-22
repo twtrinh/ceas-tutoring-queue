@@ -9,7 +9,7 @@ import firebase, { auth } from '../firebase';
 export default function Layout({ children }) {
   const location = useLocation();
   const user = useUser();
-  
+
   return (
     <div>
       <Menu mode="horizontal" selectedKeys={[location.pathname]}>
@@ -23,12 +23,24 @@ export default function Layout({ children }) {
             Submit Request
           </Link>
         </Menu.Item>
-        <Menu.Item>
-          {user?.displayName}
-        </Menu.Item>
-        <Menu.Item onClick={user ? () => auth.signOut() : () => signIn()}>
-          { user ? 'Sign Out' : 'Sign In' }
-        </Menu.Item>
+        {
+          user ?
+            <>
+              <Menu.Item>
+                {user.displayName}
+              </Menu.Item>
+              <Menu.Item onClick={() => auth.signOut()}>
+                Sign Out
+              </Menu.Item>
+            </> :
+            <>
+              <Menu.Item key="/login">
+                <Link to="/login">
+                  Sign In
+                </Link>
+              </Menu.Item>
+            </>
+        }
       </Menu>
       {children}
     </div>
