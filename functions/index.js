@@ -32,7 +32,6 @@ app.post('/api/requests', async (req, res) => {
       completed: false,
       requestedAt: new Date().toString()
     }
-    functions.logger.log(querySnapshot);
     if (!querySnapshot.size) {
       const newDoc = await requestCollection.add(request);
       res.status(201).send(`Created a new request: ${newDoc.id}`);
@@ -48,10 +47,8 @@ app.post('/api/requests', async (req, res) => {
 })
 
 app.get('/api/requests', async (req, res) => {
-  functions.logger.log(req);
   try {
     const requests = (await db.collection(requestCollectionName).orderBy('requestedAt').get()).docs.map(doc => doc.data());
-    functions.logger.log(requests);
     res.send(JSON.stringify(requests));
   } catch (error){
     functions.logger.error(error);
@@ -62,3 +59,8 @@ app.get('/api/requests', async (req, res) => {
 app.use('/api', router);
 
 exports.api = functions.https.onRequest(app);
+
+exports.processSignUp = functions.auth.user().onCreate((user) => {
+  admin.auth().updateUser(user.uid, { disabled: true });
+  functions.logger.log(user);
+});
