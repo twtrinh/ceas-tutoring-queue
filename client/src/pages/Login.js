@@ -18,7 +18,7 @@ export default function Login() {
         callbacks: {
             signInSuccessWithAuthResult: (authResult, url) => {
                 if (authResult.additionalUserInfo.isNewUser) {
-                    auth.signOut();
+                    // auth.signOut();
                     setIsNewUser(true);
                 }
                 console.log(authResult);
